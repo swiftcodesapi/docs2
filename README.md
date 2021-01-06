@@ -1,2 +1,2 @@
 # docs
-docs.swiftcodes.io
+docs.swiftcodesapi.com

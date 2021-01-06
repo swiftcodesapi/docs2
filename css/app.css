@@ -15,9 +15,11 @@ body {
     background: #fafafa;
 }
 
+/*
 .scheme-container {
     display: none;
 }
+*/
 
 .download-url-wrapper {
     display: none !important;

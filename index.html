@@ -1,38 +1,67 @@
 <!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>swiftcodes.io API Docs</title>
-    <link rel="stylesheet" type="text/css" href="/css/swagger-ui.css" >
-    <link rel="stylesheet" type="text/css" href="/css/app.css" >
-  </head>
+    <link rel="stylesheet" type="text/css" href="/css/swagger-ui.css">
+    <link rel="stylesheet" type="text/css" href="/css/app.css">
+</head>
 
-  <body>
-    <div id="swagger-ui"></div>
+<body>
+<div id="swagger-ui"></div>
 
-    <script src="/js/swagger-ui-bundle.js"> </script>
-    <script src="/js/swagger-ui-standalone-preset.js"> </script>
-    <script>
-    window.onload = function() {
-      // Begin Swagger UI call region
-      const ui = SwaggerUIBundle({
-        url: "http://api.swiftcodes.io/v1/swagger.json",
-        dom_id: '#swagger-ui',
-        deepLinking: true,
-        presets: [
-          SwaggerUIBundle.presets.apis,
-          SwaggerUIStandalonePreset
-        ],
-        plugins: [
-          SwaggerUIBundle.plugins.DownloadUrl
-        ],
-        layout: "StandaloneLayout"
-      })
-      // End Swagger UI call region
+<script src="/js/swagger-ui-bundle.js"></script>
+<script src="/js/swagger-ui-standalone-preset.js"></script>
+<script>
+    function getQueryParamByName(name, url) {
+        if (!url) {
+            url = window.location.href;
+        }
 
-      window.ui = ui
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+        var results = regex.exec(url);
+
+        if (!results) {
+            return null;
+        }
+
+        if (!results[2]) {
+            return '';
+        }
+
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
-  </script>
-  </body>
+
+    window.onload = function () {
+        var url = (window.location.host.indexOf('.local') !== false)
+            ? 'http://swiftcodesapi.local/v1/swagger.json'
+            : 'https://swiftcodesapi.com/v1/swagger.json';
+
+        // Begin Swagger UI call region
+        const ui = SwaggerUIBundle({
+            url: url,
+            dom_id: '#swagger-ui',
+            deepLinking: true,
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            plugins: [
+                SwaggerUIBundle.plugins.DownloadUrl
+            ],
+            layout: "StandaloneLayout",
+            onComplete: function () {
+                var key = getQueryParamByName('key');
+                if (key) {
+                    ui.preauthorizeApiKey("ApiKeyAuth", key);
+                }
+            }
+        });
+
+        window.ui = ui;
+    }
+</script>
+</body>
 </html>
