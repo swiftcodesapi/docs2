@@ -19,3 +19,7 @@ services:
       - ./:/var/www
       - ./config/docker/nginx/default.template:/etc/nginx/conf.d/default.template
     command: /bin/sh -c "envsubst '$${APP_NAME} $${SERVER_NAME}' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.swiftcodesapi-docs.rule=Host(`${SERVER_NAME}`,`www.${SERVER_NAME}`)'

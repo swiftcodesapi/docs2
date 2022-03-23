@@ -14,10 +14,29 @@
     <meta name="referrer" content="no-referrer" />
     <title>swiftcodesapi.com API Docs</title>
     <link rel="stylesheet" type="text/css" href="/css/swagger-ui.css">
+    <link rel="stylesheet" type="text/css" href="/css/dark.css">
     <link rel="stylesheet" type="text/css" href="/css/app.css">
 </head>
 
 <body>
+
+<nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo"><img src="https://swiftcodesapi.com/img/logo.svg" class="mr-2" width="24" height="26" alt="" />SWIFT codes API</a>
+        <a href="https://swiftcodesapi.com/v1/swagger.json" class="spec">OpenAPI Specification 3.0</a>
+    </div>
+</nav>
+
+<div class="container" id="articles">
+    <p>Help Articles:</p>
+    <ul>
+        <li><a href="https://swiftcodesapi.com/iban-number-validation">IBAN number validation</a></li>
+        <li><a href="https://swiftcodesapi.com/swift-code-validation">SWIFT code validation</a></li>
+        <li><a href="https://swiftcodesapi.com/bsb-number-validation">BSB number validation</a></li>
+        <li><a href="https://swiftcodesapi.com/ncc-code-validation">NCC code validation</a></li>
+        <li><a href="https://swiftcodesapi.com/ifsc-code-validation">IFSC code validation</a></li>
+    </ul>
+</div>
 <div id="swagger-ui"></div>
 
 <script src="/js/swagger-ui-bundle.js"></script>
@@ -53,6 +72,18 @@
             url: url,
             dom_id: '#swagger-ui',
             deepLinking: true,
+            requestSnippetsEnabled: true,
+            requestSnippets: {
+                generators: {
+                    curl_bash: {
+                        title: "cURL (bash)",
+                        syntax: "bash"
+                    },
+                },
+                defaultExpanded: true,
+                languages: null,
+                // e.g. only show curl bash = ["curl_bash"]
+            },
             presets: [
                 SwaggerUIBundle.presets.apis,
                 SwaggerUIStandalonePreset
