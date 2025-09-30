@@ -12,7 +12,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="referrer" content="no-referrer" />
-    <title>swiftcodesapi.com API Docs</title>
+    <title>fincodesapi.com API Docs</title>
     <link rel="stylesheet" type="text/css" href="/css/swagger-ui.css">
     <link rel="stylesheet" type="text/css" href="/css/dark.css">
     <link rel="stylesheet" type="text/css" href="/css/app.css">
@@ -22,22 +22,29 @@
 
 <nav class="navbar">
     <div class="container">
-        <a href="https://swiftcodesapi.com" class="logo"><img src="https://swiftcodesapi.com/img/logo.svg" class="mr-2" width="24" height="26" alt="" />Fin Codes API</a>
-        <a href="https://swiftcodesapi.com/v1/swagger.json" class="spec">OpenAPI Specification 3.0</a>
+        <a href="https://fincodesapi.com" class="logo"><img src="https://fincodesapi.com/img/logo.svg" class="mr-2" width="24" height="26" alt="" />Fin Codes API</a>
+        <form method="get" id="version-form" class="version swagger-ui">
+            <label for="version">Version:</label>
+            <select id="version" name="version">
+                <option value="v2">v2</option>
+                <option value="v1">v1</option>
+            </select>
+        </form>
+        <!--<a href="https://swiftcodesapi.com/v1/swagger.json" class="spec">OpenAPI Specification 3.0</a>-->
     </div>
 </nav>
 
 <div class="container" id="articles">
     <p>Help Articles:</p>
     <ul style="margin-bottom:1em">
-        <li><a href="https://swiftcodesapi.com/iban-number-validation">IBAN Validation</a></li>
-        <li><a href="https://swiftcodesapi.com/swift-code-validation">BIC Validation</a></li>
-        <li><a href="https://swiftcodesapi.com/us-aba-rtn-number-validation">US ABA/RTN Validation</a></li>
-        <li><a href="https://swiftcodesapi.com/canada-routing-number-validation">Canada Routing Number Validation</a></li>
-        <li><a href="https://swiftcodesapi.com/bsb-number-validation">Australia BSB Validation</a></li>
-        <li><a href="https://swiftcodesapi.com/ncc-code-validation">New Zealand NCC Validation</a></li>
-        <li><a href="https://swiftcodesapi.com/ifsc-code-validation">India IFSC Validation</a></li>
-        <li><a href="https://swiftcodesapi.com/clabe-number-validation">Mexico CLABE Validation</a></li>
+        <li><a href="https://fincodesapi.com/iban-number-validation">IBAN Validation</a></li>
+        <li><a href="https://fincodesapi.com/bic-code-validation">BIC Validation</a></li>
+        <li><a href="https://fincodesapi.com/us-aba-rtn-number-validation">US ABA/RTN Validation</a></li>
+        <li><a href="https://fincodesapi.com/canada-routing-number-validation">Canada Routing Number Validation</a></li>
+        <li><a href="https://fincodesapi.com/bsb-number-validation">Australia BSB Validation</a></li>
+        <li><a href="https://fincodesapi.com/ncc-code-validation">New Zealand NCC Validation</a></li>
+        <li><a href="https://fincodesapi.com/ifsc-code-validation">India IFSC Validation</a></li>
+        <li><a href="https://fincodesapi.com/clabe-number-validation">Mexico CLABE Validation</a></li>
     </ul>
     <p>Not affiliated with or endorsed by S.W.I.F.T. SC. "SWIFT" is a registered trademark of S.W.I.F.T. SC.</p>
 </div>
@@ -68,12 +75,21 @@
 
     window.onload = function () {
         var url = (window.location.host.indexOf('.local') !== -1)
-            ? 'http://swiftcodesapi.local/v1/swagger.json'
-            : 'https://swiftcodesapi.com/v1/swagger.json';
+            ? 'http://api.fincodesapi.local/v2/swagger.json'
+            : 'https://api.fincodesapi.com/v2/swagger.json';
+
+        // Get "version" query parameter (if set)
+        let version = getQueryParamByName('version');
+        if (version === 'v1') {
+            url = url.replace('/v2/', '/v1/');
+            document.getElementById('version').value = version;
+        }
 
         // Begin Swagger UI call region
         const ui = SwaggerUIBundle({
             url: url,
+            //urls: urls,
+            //"urls.primaryName": "API Two"  // default document (if other than the first)
             dom_id: '#swagger-ui',
             deepLinking: true,
             requestSnippetsEnabled: true,
@@ -102,6 +118,22 @@
                     ui.preauthorizeApiKey("ApiKeyAuth", key);
                 }
             }
+        });
+
+        document.getElementById('version').addEventListener('change', function() {
+            // Submit the form
+            document.getElementById('version-form').submit();
+            /*
+            let url = this.value;
+            if (window.location.host.indexOf('.local') !== -1) {
+                url = url
+                    .replace('https://', 'http://')
+                    .replace('.com', '.local');
+            }
+
+            ui.specActions.updateUrl(url);
+            ui.specActions.download(url);
+             */
         });
 
         window.ui = ui;

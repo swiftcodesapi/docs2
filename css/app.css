@@ -189,6 +189,15 @@ button.authorization__btn, button.opblock-summary-control, button .arrow {
     color: #ee60a5;
 }
 
+.version {
+    float: right;
+}
+.version label {
+    color: #fff;
+    margin-right: 5px;
+    font-size: 14px;
+}
+
 #articles {
     padding-top: 20px;
     padding-bottom: 20px;

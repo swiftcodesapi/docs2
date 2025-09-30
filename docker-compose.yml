@@ -1,9 +1,7 @@
-version: '3'
-
 networks:
   default:
-    external:
-      name: ${EXTERNAL_NETWORK}
+    name: ${EXTERNAL_NETWORK}
+    external: true
 
 services:
 
