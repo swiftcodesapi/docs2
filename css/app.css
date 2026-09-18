@@ -121,6 +121,10 @@ button.authorization__btn, button.opblock-summary-control, button .arrow {
     margin-bottom: 0;
 }
 
+.swagger-ui .renderedMarkdown p {
+    display: none;
+}
+
 .swagger-ui .model-box-control:focus, .swagger-ui .models-control:focus, .swagger-ui .opblock-summary-control:focus {
     outline: none;
 }

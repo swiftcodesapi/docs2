@@ -76,8 +76,8 @@
     }
 
     window.onload = function () {
-        var url = (window.location.host.indexOf('.local') !== -1)
-            ? 'http://api.fincodesapi.local/v2/swagger.json'
+        var url = (window.location.host.indexOf('.test') !== -1)
+            ? 'http://api.fincodesapi.test/v2/swagger.json'
             : 'https://api.fincodesapi.com/v2/swagger.json';
 
         // Get "version" query parameter (if set)
@@ -127,10 +127,10 @@
             document.getElementById('version-form').submit();
             /*
             let url = this.value;
-            if (window.location.host.indexOf('.local') !== -1) {
+            if (window.location.host.indexOf('.test') !== -1) {
                 url = url
                     .replace('https://', 'http://')
-                    .replace('.com', '.local');
+                    .replace('.com', '.test');
             }
 
             ui.specActions.updateUrl(url);
