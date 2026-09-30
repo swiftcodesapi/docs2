@@ -1,0 +1,56 @@
+# Fin Codes API
+
+> Banking reference data API: IBAN validation and bank lookup, SWIFT/BIC lookup, bank and branch reference data, national bank codes (US ABA/RTN, Canadian routing numbers, Australian BSB, New Zealand NCC, Indian IFSC, Mexican CLABE, Argentine CBU), Verification of Payee for supported SEPA accounts, and sanctions screening against the EU, UK, UN, OFAC, Swiss, Australian and Canadian lists. Use it with an API key and a subscription, or pay per request in USDC over x402 with no account.
+
+Base URL: `https://api.fincodesapi.com`. All responses are JSON: `{"success": true, "data": {...}}` on success, `{"success": false, ...}` with an HTTP 4xx/5xx status on error.
+
+## Pay per request with x402 (no account, no API key)
+
+For AI agents and automated clients. Every operation is a `POST` to a fixed URL with a JSON body; identifiers never go in the URL. Payment is x402 v2, `exact` scheme, USDC on Base (`eip155:8453`). Send the request without a `PAYMENT-SIGNATURE` header to get HTTP 402 with the payment terms, sign them and retry; any x402 client (for example `@x402/fetch` or `@x402/axios`) does this automatically. Malformed bodies (missing, blank or unknown fields) get HTTP 400 before any payment; an invalid IBAN or BIC is reported after payment. Payments are non-refundable and a settled payment cannot be reused (retrying it returns HTTP 409).
+
+- [IBAN lookup](https://api.fincodesapi.com/x402/iban/lookup): `POST {"iban": "DE75512108001245126199"}`, $0.04. Validates the IBAN and returns account structure, country, national bank/branch codes and the bank's BIC/SWIFT.
+- [BIC/SWIFT lookup](https://api.fincodesapi.com/x402/bic/lookup): `POST {"bic": "SOGEDEFF"}`, $0.04. Returns bank, branch, address, city and country.
+- [Verification of Payee](https://api.fincodesapi.com/x402/iban/verify-payee): `POST {"iban": "...", "payee_name": "John Doe", "include_matched_payee_name": false}`, $0.20. Checks a name against the holder of a SEPA account; read `payee_name_match`: `MATCH`, `CLOSE_MATCH`, `NO_MATCH`, `NOT_APPLICABLE` or `BANK_UNAVAILABLE`. A successful response does not mean the name matched.
+- [Sanctions screening](https://api.fincodesapi.com/x402/sanctions-screening): `POST {"name": "Sadam Husein", "type": "INDIVIDUAL", "sources": ["EU", "UK"], "min_score": 90}` (only `name` is required), $0.01. Returns matching sanctioned parties with score, list, list reference, programs and birth dates, best match first. Matches are name similarity and need human review.
+- [x402 OpenAPI](https://api.fincodesapi.com/openapi.json): request and response schemas, prices (`x-payment-info`) and usage guidance.
+- [x402 manifest](https://api.fincodesapi.com/.well-known/x402)
+
+## Subscription API with an API key
+
+Send the key in the `X-Api-Key` header. Plans include a free trial; each distinct lookup counts toward the plan's request limit.
+
+- `GET /v2/iban/{iban}`: IBAN validation and bank lookup
+- `POST /v2/iban` with `{"iban", "payee_name"}`: IBAN lookup with Verification of Payee for SEPA IBANs
+- `GET /v2/bic/{bic}`: BIC/SWIFT lookup
+- `GET /v2/rtn/{rtn}`: US ABA routing number lookup
+- `GET /v2/crn/{crn}`: Canadian routing number lookup
+- `GET /v2/bsb/{bsb}`: Australian BSB lookup
+- `GET /v2/ncc/{ncc}`: New Zealand bank/branch (NCC) lookup
+- `GET /v2/ifsc/{ifsc}`: Indian IFSC lookup
+- `GET /v2/clabe/{clabe}`: Mexican CLABE lookup
+- `POST /v2/cbu` with `{"cbu"}`: Argentine CBU lookup
+- `POST /v2/sanctions-screening` with `{"name"}`: sanctions screening
+
+Example: `curl -H "X-Api-Key: YOUR_KEY" https://api.fincodesapi.com/v2/iban/DE75512108001245126199`
+
+- [API documentation](https://docs.fincodesapi.com)
+- [OpenAPI specification (v2)](https://api.fincodesapi.com/v2/swagger.json)
+- [Postman collection](https://fincodesapi.com/v2/postman.json)
+- [Pricing](https://fincodesapi.com/pricing)
+- [Sign up for an API key](https://fincodesapi.com/sign-up)
+
+## Guides
+
+- [IBAN validation](https://fincodesapi.com/iban-number-validation)
+- [BIC/SWIFT code validation](https://fincodesapi.com/bic-code-validation)
+- [Bank account validation](https://fincodesapi.com/bank-account-validation-api)
+- [Verification of Payee](https://fincodesapi.com/verification-of-payee)
+- [Sanctions screening API](https://fincodesapi.com/sanctions-screening-api)
+
+## Optional
+
+- [Service status](https://status.fincodesapi.com)
+- [Service level agreement](https://fincodesapi.com/service-level-agreement)
+- [Terms of service](https://fincodesapi.com/terms-of-service)
+- [Privacy policy](https://fincodesapi.com/privacy-policy)
+- Contact: support@fincodesapi.com
