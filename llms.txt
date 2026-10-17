@@ -10,14 +10,14 @@ For AI agents and automated clients. Every operation is a `POST` to a fixed URL 
 
 - [IBAN lookup](https://api.fincodesapi.com/x402/iban/lookup): `POST {"iban": "DE75512108001245126199"}`, $0.04. Validates the IBAN and returns account structure, country, national bank/branch codes and the bank's BIC/SWIFT.
 - [BIC/SWIFT lookup](https://api.fincodesapi.com/x402/bic/lookup): `POST {"bic": "SOGEDEFF"}`, $0.04. Returns bank, branch, address, city and country.
-- [Verification of Payee](https://api.fincodesapi.com/x402/iban/verify-payee): `POST {"iban": "...", "payee_name": "John Doe", "include_matched_payee_name": false}`, $0.20. Checks a name against the holder of a SEPA account; read `payee_name_match`: `MATCH`, `CLOSE_MATCH`, `NO_MATCH`, `NOT_APPLICABLE` or `BANK_UNAVAILABLE`. A successful response does not mean the name matched.
+- [Verification of Payee](https://api.fincodesapi.com/x402/iban/verify-payee): `POST {"iban": "...", "payee_name": "John Doe"}`, $0.20. Checks a name against the holder of a SEPA account; read `payee_name_match`: `MATCH`, `CLOSE_MATCH`, `NO_MATCH`, `NOT_APPLICABLE` or `BANK_UNAVAILABLE`. A successful response does not mean the name matched.
 - [Sanctions screening](https://api.fincodesapi.com/x402/sanctions-screening): `POST {"name": "Sadam Husein", "type": "INDIVIDUAL", "sources": ["EU", "UK"], "min_score": 90}` (only `name` is required), $0.01. Returns matching sanctioned parties with score, list, list reference, programs and birth dates, best match first. Matches are name similarity and need human review.
 - [x402 OpenAPI](https://api.fincodesapi.com/openapi.json): request and response schemas, prices (`x-payment-info`) and usage guidance.
 - [x402 manifest](https://api.fincodesapi.com/.well-known/x402)
 
 ## Subscription API with an API key
 
-Send the key in the `X-Api-Key` header. Plans include a free trial; each distinct lookup counts toward the plan's request limit.
+Send the key as a bearer token in the `Authorization` header (`Authorization: Bearer YOUR_KEY`). Plans include a free trial; each distinct lookup counts toward the plan's request limit.
 
 - `GET /v2/iban/{iban}`: IBAN validation and bank lookup
 - `POST /v2/iban` with `{"iban", "payee_name"}`: IBAN lookup with Verification of Payee for SEPA IBANs
@@ -31,7 +31,7 @@ Send the key in the `X-Api-Key` header. Plans include a free trial; each distinc
 - `POST /v2/cbu` with `{"cbu"}`: Argentine CBU lookup
 - `POST /v2/sanctions-screening` with `{"name"}`: sanctions screening
 
-Example: `curl -H "X-Api-Key: YOUR_KEY" https://api.fincodesapi.com/v2/iban/DE75512108001245126199`
+Example: `curl -H "Authorization: Bearer YOUR_KEY" https://api.fincodesapi.com/v2/iban/DE75512108001245126199`
 
 - [API documentation](https://docs.fincodesapi.com)
 - [OpenAPI specification (v2)](https://api.fincodesapi.com/v2/swagger.json)
@@ -39,13 +39,22 @@ Example: `curl -H "X-Api-Key: YOUR_KEY" https://api.fincodesapi.com/v2/iban/DE75
 - [Pricing](https://fincodesapi.com/pricing)
 - [Sign up for an API key](https://fincodesapi.com/sign-up)
 
+## MCP server
+
+Remote MCP server (Streamable HTTP) at `https://mcp.fincodesapi.com/mcp`. Claude, ChatGPT and VS Code connect with OAuth: add the URL and sign in to your Fin Codes API account when prompted. Other clients send an API key as a bearer token in the `Authorization: Bearer YOUR_KEY` header. Tools: `lookup_iban`, `verify_iban_payee`, `lookup_bic`, `lookup_us_routing_number`, `lookup_canada_routing_number`, `lookup_australia_bsb`, `lookup_new_zealand_bank_code`, `lookup_india_ifsc`, `lookup_mexico_clabe`, `lookup_argentina_cbu` and `screen_sanctions`. Each tool call counts as an API request on the plan.
+
+Example with an API key: `claude mcp add --transport http fincodesapi https://mcp.fincodesapi.com/mcp --header "Authorization: Bearer YOUR_KEY"`
+
+- [MCP server setup](https://fincodesapi.com/mcp-server)
+
 ## Guides
 
 - [IBAN validation](https://fincodesapi.com/iban-number-validation)
 - [BIC/SWIFT code validation](https://fincodesapi.com/bic-code-validation)
 - [Bank account validation](https://fincodesapi.com/bank-account-validation-api)
 - [Verification of Payee](https://fincodesapi.com/verification-of-payee)
-- [Sanctions screening API](https://fincodesapi.com/sanctions-screening-api)
+- [Sanctions screening API](https://fincodesapi.com/sanctions-screening)
+- [How sanctions screening works](https://fincodesapi.com/how-sanctions-screening-works)
 
 ## Optional
 

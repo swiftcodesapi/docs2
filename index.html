@@ -118,7 +118,7 @@
             onComplete: function () {
                 var key = getQueryParamByName('key');
                 if (key) {
-                    ui.preauthorizeApiKey("ApiKeyAuth", key);
+                    ui.preauthorizeApiKey("BearerAuth", key);
                 }
             }
         });
